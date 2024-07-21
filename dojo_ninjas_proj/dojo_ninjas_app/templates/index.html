@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dojos & Ninjas</title>
+</head>
+<body>
+    <h1>Add a Dojo</h1>
+    <form action="{% url 'add_dojo' %}" method="post">
+        {% csrf_token %}
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name">
+        <label for="city">City</label>
+        <input type="text" name="city" id="city">
+        <label for="state">State</label>
+        <input type="text" name="state" id="state">
+        <button type="submit">Add</button>
+    </form>
+
+    <h1>Add a Ninja</h1>
+    <form action="{% url 'add_ninja' %}" method="post">
+        {% csrf_token %}
+        <label for="first_name">First Name</label>
+        <input type="text" name="first_name" id="first_name">
+        <label for="last_name">Last Name</label>
+        <input type="text" name="last_name" id="last_name">
+        <label for="dojo">Dojo</label>
+        <select name="dojo" id="dojo">
+            {% for dojo in dojos %}
+                <option value="{{ dojo.id }}">{{ dojo.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Add</button>
+    </form>
+
+    <h1>All the Dojos</h1>
+    {% for dojo in dojos %}
+        <h2>Ninjas at the {{ dojo.name }}</h2>
+        <ul>
+            {% for ninja in dojo.ninjas.all %}
+                <li>{{ ninja.first_name }} {{ ninja.last_name }}</li>
+            {% endfor %}
+        </ul>
+        <form action="{% url 'delete_dojo' dojo.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+    {% endfor %}
+</body>
+</html>
